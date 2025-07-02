@@ -1,0 +1,22 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class home : MonoBehaviour
+{
+    void Start()
+    {
+        GetComponent<Button>().onClick.AddListener(OnHomeButtonClicked);
+    }
+
+    void OnHomeButtonClicked()
+    {
+        // 現在のシーンのリセット処理を呼ぶ
+        if (Player.Instance != null) Player.Instance.ResetAll();
+        if (Hurt.Instance != null) Hurt.Instance.ResetAll();
+        if (TimeManager.Instance != null) TimeManager.Instance.ResetAll();
+
+        // ホームシーンへ遷移
+        SceneManager.LoadScene("SampleScene");
+    }
+}
