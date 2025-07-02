@@ -1,1 +1,183 @@
 
+using UnityEngine;
+using TMPro;
+using System.Linq;
+using System.Collections.Generic;
+
+public class Player : MonoBehaviour
+{
+    public static Player Instance { get; private set; }
+
+    [Header("UI References")]
+    public TMP_InputField inputField;
+    public TMP_Text resultText;
+
+    [Header("Colors")]
+    // CPUの単語表示色をHexコードで指定可能
+    public string cpuWordColorHex = "#FF69B4";  // デフォルトはピンク
+
+    private List<string> wordList = new List<string>();
+
+    private readonly char[] hiragana = new char[]
+    {
+        'あ','い','う','え','お',
+        'か','き','く','け','こ',
+        'さ','し','す','せ','そ',
+        'た','ち','つ','て','と',
+        'な','に','ぬ','ね','の',
+        'は','ひ','ふ','へ','ほ',
+        'ま','み','む','め','も',
+        'や','ゆ','よ',
+        'ら','り','る','れ','ろ',
+        'わ'
+    };
+
+    public char Tail { get; private set; }
+    public char Con { get; private set; }
+    public int Turn { get; private set; }
+    public bool isGameOver = false;
+    private char preFirst;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void Start()
+    {
+        ResetAll();
+    }
+
+    public void ResetAll()
+    {
+        wordList.Clear();
+        SetRandomFirstChar();
+        Turn = 1;
+        isGameOver = false;
+        if (inputField != null)
+        {
+            inputField.text = Tail.ToString();
+            inputField.caretPosition = 1;
+            inputField.ActivateInputField();
+        }
+        if (resultText != null)
+        {
+            resultText.text = Tail.ToString();
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            SubmitInput();
+
+        TimeManager.Instance.limitTime -= Time.deltaTime;
+        float currentTime = TimeManager.Instance.limitTime;
+
+        if (currentTime <= 0)
+        {
+            SetRandomFirstChar();
+        }
+    }
+
+    public void ResetTurn()
+    {
+        Turn = 1;
+    }
+
+    public void SetRandomFirstChar()
+    {
+        int rnd;
+        char first;
+
+        do
+        {
+            rnd = Random.Range(0, hiragana.Length);
+            first = hiragana[rnd];
+        }
+        while (first == preFirst && preFirst != '\0');
+
+        preFirst = first;
+
+        wordList.Clear();
+        wordList.Add(first.ToString());
+        resultText.text = first.ToString();
+        inputField.text = first.ToString();
+        inputField.caretPosition = 1;
+        inputField.ActivateInputField();
+        Turn = 1;
+        Tail = first;
+    }
+
+    public void SubmitInput()
+    {
+        string inputWord = inputField.text.Trim();
+
+        if (string.IsNullOrEmpty(inputWord))
+        {
+            resultText.text = "単語を入力してください";
+            inputField.ActivateInputField();
+            return;
+        }
+
+        if (wordList.Count == 0)
+        {
+            if (!hiragana.Contains(inputWord[0]))
+            {
+                resultText.text = "あ～わのひらがなで始めてください";
+                inputField.Select();
+                inputField.ActivateInputField();
+                return;
+            }
+        }
+        else if (inputWord[0] != Tail)
+        {
+            resultText.text = $"前の単語の末尾「{Tail}」から始めてください";
+            inputField.Select();
+            inputField.ActivateInputField();
+            return;
+        }
+
+        int requiredLength = Turn + 1;
+        if (inputWord.Length != requiredLength)
+        {
+            resultText.text = $"[{Tail}]で{requiredLength}文字の単語を入力してください";
+            inputField.Select();
+            inputField.ActivateInputField();
+            return;
+        }
+
+        AcceptWord(inputWord);
+        resultText.text = inputWord;
+        inputField.text = Tail.ToString();
+        inputField.caretPosition = 1;
+        inputField.ActivateInputField();
+    }
+
+    // CPUが単語を出すとき呼ぶ
+    public void SubmitCPUWord(string cpuWord)
+    {
+        AcceptWord(cpuWord);
+
+        // cpuWordColorHexで指定した色で表示
+        resultText.text = $"<color={cpuWordColorHex}>{cpuWord}</color>";
+
+        inputField.text = Tail.ToString();
+        inputField.caretPosition = 1;
+        inputField.ActivateInputField();
+    }
+
+    private void AcceptWord(string word)
+    {
+        wordList.Add(word);
+        Tail = word[word.Length - 1];
+        Con = word.Length > 1 ? word[word.Length - 2] : Tail;
+        Turn++;
+    }
+
+    // Tailを強制的にセットするメソッド（必要なら使う）
+    public void ForceSetTail(char newTail)
+    {
+        Tail = newTail;
+    }
+}
