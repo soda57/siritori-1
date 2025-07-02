@@ -1,105 +1,114 @@
 # 1UP しりとり
 
-CPUと交互にしりとりを行うゲームです。  
-特徴は「単語が1文字ずつ増えていく」ルールです。
+CPUと交互にしりとりを行うバトル形式のゲームです。  
+特徴は「単語が1文字ずつ増えていく」独自ルールを採用しています。
+
+![Unity](https://img.shields.io/badge/Unity-2022.3%20LTS-blue)  
+![Platform](https://img.shields.io/badge/Platform-PC%20%7C%20WebGL-green)  
 
 ---
 
 ## 概要
 
 - ターンごとに単語が1文字ずつ長くなります  
-- 例: `あ` → `あい` → `いかい` ・・・  
-- 普通のしりとりにHP・制限時間を加えた**バトル形式しりとり**  
-- 語尾が続いていない、文字数不足、時間切れでペナルティ  
-- CPUと交互にバトルし、ハートが無くなった方が負け  
+  例: `あ` → `あい` → `いかい` → ...  
+- 普通のしりとりに **HP・制限時間** を加えた「バトル形式しりとり」  
+- 語尾が続いていない、文字数不足、時間切れでペナルティ発生  
+- CPUと交互に単語を出し合い、ハート（HP）が無くなった方が負け  
+
+ゲーム公開ページ: [Unityroom - 1UPしりとり](https://unityroom.com/games/1up_shiritori)
 
 ---
 
 ## DEMO
 
 ### スタート画面
+![スタート画面](https://github.com/user-attachments/assets/5128d9a3-598c-47b7-9529-b2a959b3947e)
 
-![スタート](https://github.com/user-attachments/assets/9437da56-d2fc-4e25-b416-3475ec27cab5)  
-難易度を選択して、シーンを移動します。
+難易度を選択してゲーム開始。
 
 ---
 
 ### ゲーム画面
+![ゲーム中](https://github.com/user-attachments/assets/84ccc5b9-eb90-402e-96f2-8673c0703301)
 
-![ゲーム中](https://github.com/user-attachments/assets/77671726-b7bc-4729-bb6c-a9ed5dd1a15a)  
-シーン移動後、最初の語が出力され、しりとり開始。
-
----
-
-### 難易度選択
-
-![難易度選択](https://github.com/user-attachments/assets/e8bb896c-0ce1-48a8-b912-1aa823b9b0bb)
+シーン移動後、最初の単語が表示されしりとりスタート。
 
 ---
 
 ### ターン例・進行
+![しりとり中](画像URLをここに挿入)
 
-![しりとり中](https://github.com/user-attachments/assets/65865abb-751b-440d-ad2a-40c561d9fec2)  
-CPUと交互に単語を出し合い、ターンが進む。
+CPUと交互に単語を出し合い、ターンごとに単語が1文字ずつ増加。
 
 ---
 
 ### ゲーム終了・戻るボタン
+![ゲーム終了](https://github.com/user-attachments/assets/5f22c8f3-f078-4f10-9794-85c2ec99c00b)
 
-![ゲーム終了](https://github.com/user-attachments/assets/a0666f45-e215-49fb-bdbb-7f5970af534f)  
-ゲームオーバーまたは勝利時に停止し、ボタンでホームに戻る。
+勝敗が決まると停止し、ホームに戻るボタンが表示。
 
 ---
 
 ## Features
 
-✅ しりとり単語が1文字ずつ増加  
-✅ 語尾ミス・字数不足・時間切れでペナルティ  
-✅ CPUとHPバトル形式  
-✅ タイムリミット搭載  
-✅ 「戻るボタン」で簡単にホームへ戻れる  
+✅ 単語がターンごとに1文字ずつ増加  
+✅ 語尾ミス・文字数不足・時間切れでペナルティ  
+✅ CPUとの HP バトル形式  
+✅ 制限時間ありの緊張感  
+✅ 「戻るボタン」で簡単にホームに戻れる  
 
 ---
 
 ## Requirement
 
-Unity環境・以下の主要スクリプト構成：
+- Unity (2022.3 LTS 推奨)  
+- Visual Studio（推奨）  
 
-```csharp
-using System.Collections;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UIElements;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
+---
 
+## Installation
 
-Installation
-Visual Studio を使用する場合は、必要なusingをスクリプト冒頭に記述してください。
-Unity内で各スクリプトをGameObjectに紐付けることで動作します。
+- スクリプトの冒頭に必要な `using` を記述してください  
+- Unity内で各スクリプトを GameObject にアタッチしてください  
+- 現在、PC 向け・WebGL ビルドを想定しています  
 
-Usage
-スタート画面で難易度選択
+---
 
-シーン移動と同時に単語が表示
+## Usage
 
-しりとりバトル開始
+1. スタート画面で難易度を選択  
+2. シーン移動と同時に単語が表示され、しりとりバトル開始  
+3. ターンごとに単語が1文字ずつ増加  
+4. 語尾ミス・時間切れ・HP 0で敗北  
+5. 勝敗後、ボタンでホームに戻る  
 
-ターンごとに単語が1文字ずつ増加
+---
 
-ハートが無くなる、または時間切れで勝敗が決定
+## Note
 
-勝敗後、ボタンでホームに戻る
+⚠ スコアアタック機能は現在未実装です  
+⚠ 「ー」の後に濁音・半濁音が続く場合、しりとり判定処理が正しく動作しない場合があります  
+⚠ PC 向けローカル実行・WebGL ビルドを推奨  
 
-Note
-⚠ スコアアタック機能は未実装
-⚠ 「ー」の後に濁音・半濁音が続く場合、処理が正しく動作しないことがあります
-⚠ 現在、PC向けにローカル・WebGLでのビルドを想定しています
+---
 
-Author
-川村 草生太
+## Author
 
-高知工業高等専門学校 4年 Iコース
+川村 草生太  
+高知工業高等専門学校 4年 I コース  
 
-d61049@gm.kochi-ct.jp
+📧 d61049@gm.kochi-ct.jp  
+💻 GitHub 活用を意識しています  
+
+---
+
+## 補足
+
+本プロジェクトのコード制作では、ChatGPT を活用し、  
+主に以下のような手順で開発を進めました。
+
+- 関数・要件のリストアップ  
+- 実際のコードの提案・修正依頼  
+- Unity 実装例の確認と微調整  
+
