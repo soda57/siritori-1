@@ -113,11 +113,17 @@ CPUと交互に単語を出し合い、ターンごとに単語が1文字ずつ�
 - 実際のコードの提案・修正依頼  
 - Unity 実装例の確認と微調整
 
-##参考資料
--https://cpp-learning.com/readme/
+参考資料
+C++学習用のREADME構成例
 
--https://qiita.com/AkioMabuchi/items/a7afa292b9e47123b222
--https://cbagames.jp/2024/01/26/unity-inputfield-text-tutorial/
--https://osakanagames.com/blog/countdowntimer/
--https://matsubon-games.com/inputfield-japanese-webgl/
+Qiita: UnityプロジェクトのREADME例
+
+UnityのInputField活用ガイド（ローマ字入力含む）
+
+Unityで制限時間タイマーを実装する方法
+
+WebGLで日本語入力を可能にする方法（外部IME対応）
+
+WebGL Native Input Field - 日本語IME対応コンポーネント
+
 
