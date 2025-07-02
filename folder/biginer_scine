@@ -1,0 +1,26 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class Biginer : MonoBehaviour
+{
+    void Start()
+    {
+        // Button コンポーネントを取得し、クリック時に StartGame メソッドを呼ぶよう登録
+        Button button = gameObject.GetComponent<Button>();
+        if (button != null)
+        {
+            button.onClick.AddListener(StartGame);
+        }
+        else
+        {
+            Debug.LogWarning("Button コンポーネントが見つかりません！");
+        }
+    }
+
+    void StartGame()
+    {
+        // 指定したシーンに切り替える
+        SceneManager.LoadScene("biginer_scine");
+    }
+}
