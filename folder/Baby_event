@@ -1,0 +1,203 @@
+using System.Collections;
+using UnityEngine;
+using TMPro;
+
+public class Hurt : MonoBehaviour
+{
+    public SpriteRenderer[] hurts;                // ハート画像
+    public SpriteRenderer gameOverImage;          // ゲームオーバー画像
+    public SpriteRenderer winImage;               // 勝利画像
+    public TextMeshProUGUI gameOverText;          // GAME OVER テキスト
+    public TextMeshProUGUI winText;               // 勝利テキスト
+    public SpriteRenderer retu;                   // 汎用装飾画像
+
+    private int playerIndex = 0;                  // Playerのハート進行
+    private int cpuIndex = 2;                     // CPUのハート進行
+
+    private bool hasChanged = false;              // タイマー0秒処理フラグ
+    private bool isGameOver = false;              // ゲームオーバーフラグ
+
+    public static Hurt Instance { get; private set; }
+
+    void Awake()
+    {
+        // シングルトン設定（重複があれば破棄）
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        ResetUI();
+    }
+
+    void Update()
+    {
+        if (isGameOver || Player.Instance == null) return;
+
+        int turn = Player.Instance.Turn;
+        float currentTime = TimeManager.Instance.limitTime;
+        char tail = Player.Instance.Tail;
+
+        TimeManager.Instance.limitTime -= Time.deltaTime;
+
+        if (currentTime <= 0f && !hasChanged)
+        {
+            PlayerHeartDown();
+            hasChanged = true;
+        }
+
+        if (tail == 'ん' && !hasChanged)
+        {
+            PlayerLose();
+            hasChanged = true;
+        }
+
+        if (turn > 5 && !hasChanged)
+        {
+            TriggerCPUDefeat();
+            Player.Instance.ResetTurn();
+            Player.Instance.SetRandomFirstChar();
+            TimeManager.Instance.limitTime = 300f;
+            cpuIndex++;
+        }
+
+        if (currentTime > 0f && hasChanged)
+        {
+            hasChanged = false;
+        }
+
+        if (playerIndex >= 2) GameOver();
+        if (cpuIndex >= 4) Win();
+    }
+
+    void ChangeBlack(int index)
+    {
+        if (index < hurts.Length && hurts[index] != null)
+        {
+            hurts[index].color = Color.black;
+        }
+    }
+
+    void PlayerHeartDown()
+    {
+        ChangeBlack(playerIndex);
+        playerIndex++;
+        TimeManager.Instance.limitTime = 120f;
+    }
+
+    void PlayerLose()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            ChangeBlack(i);
+        }
+        playerIndex = 2;
+    }
+
+    public void TriggerCPUDefeat()
+    {
+        if (isGameOver || hasChanged) return;
+
+        ChangeBlack(cpuIndex);
+        hasChanged = true;
+    }
+
+    void GameOver()
+    {
+        if (isGameOver) return;
+
+        isGameOver = true;
+        gameOverImage.enabled = true;
+        if (retu != null) retu.enabled = true;
+        if (Player.Instance != null)
+        {
+            Player.Instance.resultText.text = "";
+        }
+        gameOverText.text = "ばぶばぶう～笑";
+        gameOverText.color = new Color(1, 1, 1, 0);
+        gameOverText.transform.localScale = Vector3.zero;
+        gameOverText.gameObject.SetActive(true);
+        StartCoroutine(ShowGameOverText());
+
+        Time.timeScale = 0f;
+        Debug.Log("ゲームオーバー：タイマー停止");
+    }
+
+    IEnumerator ShowGameOverText()
+    {
+        float duration = 1f;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(timer / duration);
+
+            Color color = gameOverText.color;
+            color.a = progress;
+            gameOverText.color = color;
+
+            gameOverText.transform.localScale = Vector3.one * progress;
+            yield return null;
+        }
+
+        gameOverText.color = Color.red;
+        gameOverText.transform.localScale = Vector3.one;
+    }
+
+    public void Win()
+    {
+        if (isGameOver) return;
+
+        isGameOver = true;
+        if (Player.Instance != null)
+        {
+            Player.Instance.resultText.text = "";
+        }
+        winImage.enabled = true;
+        winText.text = "びええん..泣";
+        if (retu != null) retu.enabled = true;
+
+       
+        winText.color = Color.blue;
+        winText.transform.localScale = Vector3.one;
+        winText.gameObject.SetActive(true);
+
+        Time.timeScale = 0f;
+        Debug.Log("CPU敗北：タイマー停止");
+    }
+
+    public void ResetAll()
+    {
+        playerIndex = 0;
+        cpuIndex = 2;
+        hasChanged = false;
+        isGameOver = false;
+
+        // ハートの色を白に戻す
+        for (int i = 0; i < hurts.Length; i++)
+        {
+            if (hurts[i] != null)
+                hurts[i].color = Color.white;
+        }
+
+        ResetUI();
+
+        Time.timeScale = 1f;
+    }
+
+    private void ResetUI()
+    {
+        gameOverImage.enabled = false;
+        if (gameOverText != null) gameOverText.gameObject.SetActive(false);
+        winText.gameObject.SetActive(false);
+        winImage.enabled = false;
+        if (retu != null) retu.enabled = false;
+    }
+}
