@@ -112,10 +112,12 @@ CPUと交互に単語を出し合い、ターンごとに単語が1文字ずつ�
 - 関数・要件のリストアップ  
 - 実際のコードの提案・修正依頼  
 - Unity 実装例の確認と微調整
-参考資料
-https://cpp-learning.com/readme/
-https://qiita.com/AkioMabuchi/items/a7afa292b9e47123b222
-https://cbagames.jp/2024/01/26/unity-inputfield-text-tutorial/
-https://osakanagames.com/blog/countdowntimer/
-https://matsubon-games.com/inputfield-japanese-webgl/
+
+##参考資料
+-https://cpp-learning.com/readme/
+
+-https://qiita.com/AkioMabuchi/items/a7afa292b9e47123b222
+-https://cbagames.jp/2024/01/26/unity-inputfield-text-tutorial/
+-https://osakanagames.com/blog/countdowntimer/
+-https://matsubon-games.com/inputfield-japanese-webgl/
 
