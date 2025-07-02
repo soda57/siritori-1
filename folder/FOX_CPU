@@ -1,0 +1,271 @@
+using UnityEngine;
+using System.Collections;
+
+public class foxCPU : MonoBehaviour
+{
+    private bool hasActed = false;
+
+
+    void Update()
+    {
+        if (Player.Instance == null) return;
+
+        int turn = Player.Instance.Turn;
+        char tail = Player.Instance.Tail;
+        char con = Player.Instance.Con;
+        // 偶数ターンで、まだ行動していないなら
+        if (turn % 2 == 0 && !hasActed)
+        {
+            hasActed = true;  // 行動済みにする
+            StartCoroutine(DelayedAction(tail,con,turn));
+        }
+
+        // 奇数ターンになったらリセット
+        if (turn % 2 == 1)
+        {
+            hasActed = false;
+        }
+    }
+
+    IEnumerator DelayedAction(char tail,char con, int turn)
+    {
+        yield return new WaitForSeconds(1f);  // 1秒待つ
+
+        string cpuWord = DecideCPUWord(tail,con, turn);
+
+        if (!string.IsNullOrEmpty(cpuWord))
+        {
+            Player.Instance.SubmitCPUWord(cpuWord);
+        }
+        else
+        {
+            Hurt1_fox.Instance.TriggerCPUDefeat();
+        }
+    }
+
+    string DecideCPUWord(char tail,char con, int turn)
+    {
+        if (turn == 2)
+        {
+            if (tail == 'ー')
+            {
+                tail=con;
+            }
+            switch (tail)
+            {
+                case 'あ': return "あさひ";
+                case 'い': return "いちご";
+                case 'う': return "うみべ";
+                case 'え': return "えすて";
+                case 'お': return "おくら";
+                case 'か': return "かいこ";
+                case 'き': return "きつね";
+                case 'く': return "くるま";
+                case 'け': return "けむし";
+                case 'こ': return "こぐま";
+                case 'さ': return "さかな";
+                case 'し': return "しらす";
+                case 'す': return "すめし";
+                case 'せ': return "せかい";
+                case 'そ': return "そーす";
+                case 'た': return "たこす";
+                case 'ち': return "ちゃり";
+                case 'つ': return "つしま";
+                case 'て': return "てんし";
+                case 'と': return "といれ";
+                case 'な': return "ないす";
+                case 'に': return "にかわ";
+                case 'ぬ': return "ぬーど";
+                case 'ね': return "ねぐせ";
+                case 'の': return "のーす";
+                case 'は': return "はかせ";
+                case 'ひ': return "ひつじ";
+                case 'ふ': return "ふぎり";
+                case 'へ': return "へいき";
+                case 'ほ': return "ほーす";
+                case 'ま': return "まさい";
+                case 'み': return "みかど";
+                case 'む': return "むくち";
+                case 'め': return "めだか";
+                case 'も': return "もやし";
+                case 'や': return "やさい";
+                case 'ゆ': return "ゆうひ";
+                case 'よ': return "よあけ";
+                case 'ら': return "らすと";
+                case 'り': return "りある";
+                case 'る': return "るーず";
+                case 'れ': return "れっか";
+                case 'ろ': return "ろうか";
+                case 'わ': return "わかて";
+                case 'が': return "がいか";
+                case 'ぎ': return "ぎょう";
+                case 'ぐ': return "ぐんま";
+                case 'ざ': return "ざいむ";
+                case 'じ': return "じゃる";
+                case 'ず': return "ずーむ";
+                case 'だ': return "だーま";
+                case 'ど': return "どーむ";
+                case 'ば': return "ばにら";
+                case 'び': return "びーむ";
+                case 'ぶ': return "ぶーむ";
+                case 'べ': return "べっぷ";
+                case 'ぼ': return "ぼっち";
+                case 'ぱ': return "ぱんち";
+                case 'ぴ': return "ぴんく";
+                case 'ぷ': return "ぷーる";
+                case 'ぺ': return "ぺすと";
+                case 'ぽ': return "ぽんぷ";
+
+            }
+        }
+        else if (turn == 4)
+        {
+            if (tail == 'ー')
+            {
+                tail  = con;
+            }
+            switch (tail)
+            {
+                case 'あ': return "あいきどう";
+                case 'い': return "いちごあめ";
+                case 'う': return "ういすきい";
+                case 'え': return "えいがさい";
+                case 'お': return "おるごーる";
+                case 'か': return "かたつむり";
+                case 'き': return "きょうしつ";
+                case 'く': return "くもりぞら";
+                case 'け': return "けいけんち";
+                case 'こ': return "こあめもり";
+                case 'さ': return "さいきどう";
+                case 'し': return "しょうがつ";
+                case 'す': return "すいしょう";
+                case 'せ': return "せいいぶつ";
+                case 'そ': return "そいそーす";
+                case 'た': return "たいしょう";
+                case 'ち': return "ちょうぼう";
+                case 'つ': return "ついったあ";
+                case 'て': return "ていきばす";
+                case 'と': return "といざらす";
+                case 'な': return "ないがあら";
+                case 'に': return "におうだち";
+                case 'ぬ': return "ぬいぐるみ";
+                case 'ね': return "ねいちゃあ";
+                case 'の': return "のうかがく";
+                case 'は': return "はいきゅう";
+                case 'ひ': return "ひうちいし";
+                case 'ふ': return "ふぁしずむ";
+                case 'へ': return "へいりょく";
+                case 'ほ': return "ほういもう";
+                case 'ま': return "まいぺーす";
+                case 'み': return "みかいたく";
+                case 'む': return "むきりょく";
+                case 'め': return "めいきょく";
+                case 'も': return "もうぎゅう";
+                case 'や': return "やえざくら";
+                case 'ゆ': return "ゆうしょう";
+                case 'よ': return "ようぎしゃ";
+                case 'ら': return "らいおっと";
+                case 'り': return "りあじゅう";
+                case 'る': return "るすでんわ";
+                case 'れ': return "れいぞうこ";
+                case 'ろ': return "ろうじょう";
+                case 'わ': return "わいしゃつ";
+                case 'が': return "がいちゅう";
+                case 'ぎ': return "ぎょうかい";
+                case 'ぐ': return "ぐろーばる";
+                case 'ざ': return "ざいりょう";
+                case 'だ': return "だいえっと";
+                case 'で': return "でんまーく";
+                case 'ど': return "どうじょう";
+                case 'じ': return "じゃけっと";
+                case 'ず': return "ずっきーに";
+                case 'ば': return "ばすけっと";
+                case 'び': return "びょうどう";
+                case 'ぶ': return "ぶるーれい";
+                case 'べ': return "べんきょう";
+                case 'ぼ': return "ぼりゅーむ";
+                case 'ぱ': return "ぱすわーど";
+                case 'ぴ': return "ぴーなっつ";
+                case 'ぷ': return "ぷろぐらむ";
+                case 'ぺ': return "ぺんだんと";
+                case 'ぽ': return "ぽーたぶる";
+            }
+        }
+        else if (turn == 6)
+        {
+            if (tail == 'ー')
+            {
+                tail = con;
+            }
+            switch (tail)
+            {
+                case 'あ': return "あいすくりーむ";
+                case 'い': return "いあんりょこう";
+                case 'う': return "うぃきぺでぃあ";
+                case 'え': return "えいがかんとく";
+                case 'お': return "おいるたんかー";
+                case 'か': return "かいがんどおり";
+                case 'き': return "きょういくがく";
+                case 'く': return "くろーずあっぷ";
+                case 'け': return "けいきしひょう";
+                case 'こ': return "こあたーげっと";
+                case 'さ': return "さんがくちたい";
+                case 'し': return "しょうどうぶつ";
+                case 'す': return "すいどうきょく";
+                case 'せ': return "せいおうしゅぎ";
+                case 'そ': return "そつぎょうしき";
+                case 'た': return "たいいくずわり";
+                case 'ち': return "ちきゅうかがく";
+                case 'つ': return "つきじしじょう";
+                case 'て': return "てぃーさいぼう";
+                case 'と': return "とういつどいつ";
+                case 'な': return "ないぶこくはつ";
+                case 'に': return "にくまんじゅう";
+                case 'ぬ': return "ぬきうちてすと";
+                case 'ね': return "ねったいきこう";
+                case 'の': return "のあのはこぶね";
+                case 'は': return "はいきんしゅぎ";
+                case 'ひ': return "ひかわじんじゃ";
+                case 'ふ': return "ふぁいとまねー";
+                case 'へ': return "へいあんきょう";
+                case 'ほ': return "ほういじしゃく";
+                case 'ま': return "まいくろそふと";
+                case 'み': return "みくまりのかみ";
+                case 'む': return "むがるていこく";
+                case 'め': return "めいきゅうかい";
+                case 'も': return "もうりもとなり";
+                case 'や': return "やきゅうじょう";
+                case 'ゆ': return "ゆうきひりょう";
+                case 'よ': return "ようきひざくら";
+                case 'ら': return "らいじんみさき";
+                case 'り': return "りくぐんしょう";
+                case 'る': return "るすばんでんわ";
+                case 'れ': return "れいこんふめつ";
+                case 'ろ': return "ろうにんぎょう";
+                case 'わ': return "わかだいしょう";
+                case 'が': return "がいこくしせつ";
+                case 'ぎ': return "ぎゃくかんすう";
+                case 'ぐ': return "ぐみんせいさく";
+                case 'ざ': return "ざいせいあかじ";
+                case 'だ': return "だいこくばしら";
+                case 'で': return "でんわばんごう";
+                case 'ど': return "どらごんぼーる";
+                case 'じ': return "じぇーりーがー";
+                case 'ず': return "ずのうろうどう";
+                case 'ば': return "ばいとりーだー";
+                case 'び': return "びじねすほてる";
+                case 'ぶ': return "ぶたいかんとく";
+                case 'べ': return "べっぷだいがく";
+                case 'ぼ': return "ぼうえいちょう";
+                case 'ぱ': return "ぱふぉーまんす";
+                case 'ぴ': return "ぴたごらすすう";
+                case 'ぷ': return "ぷらねたりうむ";
+                case 'ぺ': return "ぺきんりょうり";
+                case 'ぽ': return "ぽかりすえっと";
+            }
+        }
+
+        return "";
+    }
+}
+
